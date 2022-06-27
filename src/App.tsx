@@ -1,54 +1,40 @@
-import "antd/dist/antd.css";
-import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { Route, Routes, useLocation } from "react-router";
-import { createDummyData } from "./api/device";
-import { createDummyNumber } from "./api/numbers";
-import { getRoleGroup, loadRoleList } from "./api/role";
-import { createDummyService } from "./api/service";
-import {
-  getNumberByDay,
-  getNumberByWeek,
-  getNumberByYear,
-  getNumberProvidationByMonth,
-  getNumbersByMonth,
-  getNumbersToday,
-  getStatisticsByNumbers,
-} from "./api/statistic";
-import { IRoute } from "./constant/routes";
-import UtilPage from "./pages";
-import Auth from "./pages/Auth/Login/Auth";
-import ForgotPassword from "./pages/Auth/Login/ForgotPassword";
-import "./scss/app.scss";
+import React from 'react';
+import { HashRouter, Routes, Route, Outlet } from "react-router-dom";
+import Login from './routes/Login/Login';
+import Dashboard from './routes/Dashboard/Dashboard'
+import ResetPass from './routes/ResetPass/ResetPass';
+import MenuOutlet from './routeoutlets/MenuOutlet';
+import Device from './routes/Device/Device';
+import UserProfile from './routes/UserProfile/UserProfile';
+import DeviceAdd from './routes/Device/routes/DeviceAdd/DeviceAdd';
+import DeviceDetail from './routes/Device/routes/DeviceDetail/DeviceDetail';
+import DeviceUpdate from './routes/Device/routes/DeviceUpdate/DeviceUpdate';
+import DeviceOutlet from './routeoutlets/DeviceOutlet';
+import ServiceOutlet from './routeoutlets/ServiceOutlet';
+import Services from './routes/Services/Services';
 function App() {
-  const location = useLocation().pathname;
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    // createDummyData(12);
-    // createDummyService(10);
-    // createDummyNumber(30);
-    // hxrclluzftsczlym
-    // getNumberByWeek(2022, 5)
-    //   .then((res) => {
-    //     console.log(res);
-    //   })
-    //   .catch((e) => {
-    //     console.log(e);
-    //   });
-  }, []);
-
   return (
-    <div className="app">
+    <HashRouter>
       <Routes>
-        <Route path={IRoute.HOME} element={<Auth />} />
-        <Route
-          path={`${IRoute.FORGOT_PASSWORD}`}
-          element={<ForgotPassword />}
-        />
-        <Route path="*" element={<UtilPage />} />
+        <Route path="/" element={<Login />}></Route>
+        <Route path="/Reset" element={<ResetPass />}></Route>
+        <Route element={<MenuOutlet />}>
+          <Route path="UserProfile" element={<UserProfile />}></Route>
+          <Route path="Dashboard" element={<Dashboard />}></Route>
+          <Route path="Device" element={<DeviceOutlet />}>
+            <Route index element={<Device />}></Route>
+            <Route path="DeviceAdd" element={<DeviceAdd />}></Route>
+            <Route path="DeviceDetail/:ProductID" element={<DeviceDetail />}></Route>
+            <Route path="DeviceUpdate/:ProductID" element={<DeviceUpdate />}></Route>
+          </Route>
+
+          <Route path="Service" element={<ServiceOutlet />}>
+            <Route index element={<Services />}></Route>
+          </Route>
+        </Route>
       </Routes>
-    </div>
+    </HashRouter>
+
   );
 }
 
